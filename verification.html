@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Verification - Hela Pesa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-red-700 via-red-600 to-red-500 text-white min-h-screen px-4 py-6 font-sans">
+
+  <!-- Header -->
+  <div class="flex items-center gap-3 mb-6">
+    <img src="zashlogo.png" alt="Hela Pesa Logo" class="w-12 h-12 rounded-full">
+    <h1 class="text-2xl font-bold">Hela Pesa</h1>
+  </div>
+
+  <!-- Loan Summary -->
+  <div class="bg-white bg-opacity-10 p-4 rounded-xl mb-6">
+    <h2 class="text-xl font-semibold mb-2">Loan Summary</h2>
+    <p><strong>Loan Amount:</strong> Ksh <span id="amount">-</span></p>
+    <p><strong>Service Fee:</strong> Ksh <span id="fee">-</span></p>
+    <p><strong>Request Date:</strong> <span id="requestDate">-</span></p>
+    <p><strong>Due Date:</strong> <span id="dueDate">-</span></p>
+    <p><strong>M-Pesa Number:</strong> <span id="phone">-</span></p>
+  </div>
+
+  <!-- How to Pay -->
+  <div class="bg-white bg-opacity-10 p-4 rounded-xl mb-6">
+    <h2 class="text-xl font-semibold mb-3">📲 How to Pay</h2>
+    <ol class="list-decimal pl-4 space-y-1">
+      <li>Go to M-Pesa > Lipa na M-Pesa</li>
+      <li>Select Buy Goods and Services</li>
+      <li>Enter Till Number: <strong class="text-yellow-300">9824375 (Hakika)</strong></li>
+      <li>Enter Amount: Ksh <strong id="payAmount" class="text-yellow-300">-</strong></li>
+      <li>Enter M-Pesa PIN and confirm</li>
+      <li>Wait for confirmation SMS</li>
+    </ol>
+  </div>
+
+  <!-- Confirmation Message -->
+  <div class="bg-white bg-opacity-10 p-4 rounded-xl mb-6">
+    <label for="mpesaMessage" class="block mb-2 font-medium">Paste your full M-Pesa confirmation message</label>
+    <textarea id="mpesaMessage" placeholder="e.g. HAKIKA R PROVISION Ksh XX received from..."
+      class="w-full p-3 rounded text-black h-32" required></textarea>
+  </div>
+
+  <!-- Submit Button -->
+  <button onclick="submit()"
+    class="w-full bg-yellow-400 text-black font-bold py-3 rounded-full hover:bg-yellow-300 shadow-lg">Submit</button>
+
+  <script>
+    const data = JSON.parse(localStorage.getItem('loanRequest')) || {};
+
+    document.getElementById('amount').textContent = data.amount?.toLocaleString() || '-';
+    document.getElementById('fee').textContent = data.serviceFee?.toLocaleString() || '-';
+    document.getElementById('requestDate').textContent = data.requestDate || '-';
+    document.getElementById('dueDate').textContent = data.dueDate || '-';
+    document.getElementById('phone').textContent = data.phone || '-';
+    document.getElementById('payAmount').textContent = data.serviceFee?.toLocaleString() || '-';
+
+    function submit() {
+      const msg = document.getElementById("mpesaMessage").value.trim();
+      if (!msg) {
+        alert("Please paste the M-Pesa confirmation message.");
+        return;
+      }
+
+      try {
+        // Store confirmation message to localStorage
+        localStorage.setItem('confirmationMessage', msg);
+        window.location.href = "success.html";
+      } catch (error) {
+        console.error("Error saving confirmation message:", error);
+        alert("There was an error saving your confirmation. Please try again.");
+      }
+    }
+  </script>
+</body>
+
+</html>
